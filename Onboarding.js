@@ -8,18 +8,13 @@ import Hero from './components/hero';
 export default function Onboarding({ navigation }) {
   const [name, onChangeName] = useState('');
   const [email, onChangeEmail] = useState('');
-
-  const isFilled = name.trim() !== '' && email.trim() !== '' && password.trim() !== '';
+  const isFilled = name.trim() !== '' && email.trim() !== '';
 
   const handleNext = async () => {
     try {
       await AsyncStorage.setItem('@user_name', name);
       await AsyncStorage.setItem('@user_email', email);
-
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Home' }],
-      });
+      navigation.replace('Home');
     } catch (e) {
       Alert.alert('Error', 'Failed to save data');
     }
@@ -66,31 +61,54 @@ export default function Onboarding({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, 
-    backgroundColor: 'white' },
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    borderRadius: 10,
-    padding: 5,
-    fontSize: 18,
-    borderColor: '#6f7773ff',
+const styles = StyleSheet.create({ 
+  container: { 
+    flex: 1, 
     backgroundColor: 'white',
-  },
-  inputLabel: { 
+  }, 
+  input: { 
+    height: 40, 
+    margin: 12, 
+    borderWidth: 1, 
+    borderRadius: 10,
+    padding: 5, 
+    fontSize: 18, 
+    borderColor: '#6f7773ff', 
+    backgroundColor: 'white', 
+  }, 
+  messageInput: { 
+    height: 100, 
+    margin: 12, 
+    borderWidth: 1, 
+    padding: 10, 
+    fontSize: 16, 
+    backgroundColor: '#F4CE14', 
+  }, 
+    inputLabel: { 
     fontSize: 24, 
     padding: 10, 
     marginVertical: 8, 
-    color: '#a3a3b1ff' },
-  button: { 
-    margin: 12, 
-    padding: 10, 
-    backgroundColor: 'grey', 
-    alignItems: 'center' },
-    buttonDisabled: { 
-      opacity: 0.5 },
-    buttonPressed: { 
-      opacity: 0.7 },
-});
+    color: '#a3a3b1ff',
+  }, 
+  headingSection: { 
+    fontSize: 28, 
+    padding: 20, 
+    marginVertical: 8, 
+    color: '#EDEFEE', 
+    textAlign: 'center', 
+    backgroundColor: '#495E57', 
+  }, 
+  button: {
+    margin: 12,
+    padding: 10,
+    backgroundColor: 'grey',
+    alignItems: 'center',
+  },
+  buttonDisabled: {
+    opacity: 0.5,
+
+  },
+  buttonPressed: {
+    opacity: 0.7 
+  }
+}); 
