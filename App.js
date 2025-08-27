@@ -1,96 +1,33 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, KeyboardAvoidingView, Pressable, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View } from 'react-native';
 
-import LittleLemonHeader from './components/LittleLemonHeader';
-import Hero from './components/hero';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Onboarding from './Onboarding';
+import Profile from './Profile';
+import Home from './Home';
 
-export default function Onboarding({ navigation }) {
-  const [name, onChangeName] = useState('');
-  const [email, onChangeEmail] = useState('');
+const Stack = createNativeStackNavigator();
 
-  const isFilled = name.trim() !== '' && email.trim() !== '' && password.trim() !== '';
-
-  const handleNext = async () => {
-    try {
-      await AsyncStorage.setItem('@user_name', name);
-      await AsyncStorage.setItem('@user_email', email);
-
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Home' }],
-      });
-    } catch (e) {
-      Alert.alert('Error', 'Failed to save data');
-    }
-  };
-
+export default function App() {
   return (
-    <KeyboardAvoidingView style={styles.container}>
-      <ScrollView keyboardDismissMode="on-drag">
-        <LittleLemonHeader />
-        <Hero />
-
-        <Text style={styles.inputLabel}>Name*</Text>
-        <TextInput
-          style={styles.input}
-          value={name}
-          onChangeText={onChangeName}
-          placeholder="Name"
-          maxLength={50}
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Onboarding">
+        <Stack.Screen 
+          name="Onboarding" 
+          component={Onboarding} 
+          options={{ headerShown: false }}
         />
-
-        <Text style={styles.inputLabel}>Email*</Text>
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={onChangeEmail}
-          placeholder="Email"
-          maxLength={50}
-          keyboardType="email-address"
+        <Stack.Screen 
+          name="Home" 
+          component={Home} 
+          options={{ headerShown: true }}
         />
-
-        <Pressable
-          onPress={handleNext}
-          style={({ pressed }) => [
-            styles.button,
-            !isFilled && styles.buttonDisabled,
-            pressed && isFilled && styles.buttonPressed,
-          ]}
-          disabled={!isFilled}
-        >
-          <Text style={{ fontSize: 30 }}>Next</Text>
-        </Pressable>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        <Stack.Screen 
+          name="Profile" 
+          component={Profile} 
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, 
-    backgroundColor: 'white' },
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    borderRadius: 10,
-    padding: 5,
-    fontSize: 18,
-    borderColor: '#6f7773ff',
-    backgroundColor: 'white',
-  },
-  inputLabel: { 
-    fontSize: 24, 
-    padding: 10, 
-    marginVertical: 8, 
-    color: '#a3a3b1ff' },
-  button: { 
-    margin: 12, 
-    padding: 10, 
-    backgroundColor: 'grey', 
-    alignItems: 'center' },
-    buttonDisabled: { 
-      opacity: 0.5 },
-    buttonPressed: { 
-      opacity: 0.7 },
-});
